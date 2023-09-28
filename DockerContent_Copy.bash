@@ -1,22 +1,20 @@
 #!/bin/bash
 
-CONTAINER_DIR="/ruta/dentro/contenedor"
-
+CONTAINER_DIR="/usr/src/app/entity/bankdebits/"
 HOST_DIR="/ruta/fuera/contenedor"
 
-CONTAINER_NAME_OR_ID=$(docker ps -q --filter "ancestor=nombre_de_la_imagen")
+# Obtener el ID del contenedor que deseas utilizando el comando docker ps y grep
+CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 
 if [ -z "$CONTAINER_NAME_OR_ID" ]; then
-    echo "No se encontró ningún contenedor en ejecución."
+    echo "No se encontró ningún contenedor con 'build' en su nombre o ID."
     exit 1
 fi
 
 # Copiar los archivos desde el contenedor al servidor host
-docker cp "${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR}" "${HOST_DIR}"
+sudo docker cp "${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR}" "${HOST_DIR}"
 
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
-
-docker logout
 
 #1. Abre una terminal en tu servidor Linux.
 #2. Ejecuta el siguiente comando para editar el archivo crontab del usuario actual:
@@ -25,3 +23,4 @@ docker logout
 #4. 0 0 * * * /ruta/al/script/copiar_archivos.sh                        (si es 24h)
 #4. 0 */12 * * * /ruta/al/script/copiar_archivos.sh                     (si es 12h)
 #4 0 5 * * * TZ='America/Guayaquil' /ruta/al/script.sh
+
