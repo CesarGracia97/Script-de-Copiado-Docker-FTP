@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_DIR="/usr/src/app/entity/bankdebits/"
+CONTAINER_DIR="/usr/src/app/entity/bankdebits"
 HOST_DIR="/home/root_wso/RespaldoEnviados"
 
 # Obtener el ID del contenedor que deseas utilizando el comando docker ps y grep
