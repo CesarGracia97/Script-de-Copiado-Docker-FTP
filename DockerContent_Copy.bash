@@ -19,7 +19,8 @@ echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 #2. Ejecuta el siguiente comando para editar el archivo crontab del usuario actual:
 #   crontab -e
 #3. Añade una línea al final del archivo crontab para programar la ejecución diaria de tu script. 
-#4. 0 0 * * * /ruta/al/script/copiar_archivos.sh                        (si es 24h)
-#4. 0 */12 * * * /ruta/al/script/copiar_archivos.sh                     (si es 12h)
-#4 0 5 * * * TZ='America/Guayaquil' /ruta/al/script.sh
+# 0 0 * * * /ruta/al/script/copiar_archivos.sh                        (si es 24h)
+# 0 */12 * * * /ruta/al/script/copiar_archivos.sh                     (si es 12h)
+# 0 5 * * * TZ='America/Guayaquil' /ruta/al/script.sh
+# 25 16 * * * TZ='America/Guayaquil' /ruta/al/script.sh
 
