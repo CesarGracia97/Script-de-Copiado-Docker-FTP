@@ -6,13 +6,14 @@ if [ -z "$CONTAINER_NAME_OR_ID" ]; then
     exit 1
 fi
 
-sudo ./DockerContent_Copy.sh "${CONTAINER_NAME_OR_ID}"
+
 
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
 HOST_DIR="/home/root_wso/RespaldoEnviados"
 
 # Obtener el ID del contenedor que deseas utilizando el comando docker ps y grep
 
+sudo ./DockerContent_Copy.sh "${CONTAINER_NAME_OR_ID}"
 
 sudo docker cp "${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR}" "${HOST_DIR}"
 
