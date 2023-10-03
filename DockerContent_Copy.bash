@@ -16,6 +16,8 @@ echo "sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}"
 
 sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}
 
+sudo chmod -R 777 ${HOST_DIR}
+
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 
 #1. Abre una terminal en tu servidor Linux.
