@@ -6,6 +6,7 @@ if [ -z "$CONTAINER_NAME_OR_ID" ]; then
     exit 1
 fi
 
+echo "Este es el Id el contenedor:"$CONTAINER_NAME_OR_ID
 
 
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
