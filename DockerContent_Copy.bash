@@ -1,7 +1,7 @@
 #!/bin/bash
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 
-if [ -z "$CONTAINER_NAME_OR_ID" ]; then
+if [ -z $CONTAINER_NAME_OR_ID ]; then
     echo "No se encontró ningún contenedor con 'build' en su nombre o ID."
     exit 1
 fi
@@ -10,7 +10,20 @@ fi
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
 HOST_DIR="/home/root_wso/RespaldoEnviados"
 
-# Obtener el ID del contenedor que deseas utilizando el comando docker ps y grep
+# Verificar si la ruta HOST_DIR existe, si no existe, crearla
+if [ ! -d $HOST_DIR ]; then
+    echo "El Script detectó que la ruta de destino no existe, por lo tanto procederá a crearse."
+    mkdir -p $HOST_DIR
+fi
+
+# Verificar si la ruta CONTAINER_DIR en el contenedor existe
+if sudo docker exec $CONTAINER_NAME_OR_ID [ ! -d $CONTAINER_DIR ]; then
+    echo "La ruta del contenedor no existe. Revisar la Ruta de Origen, finalizando proceso."
+    exit 1
+else
+    echo "La ruta del contenedor sí existe, procediendo con el copiado."
+fi
+
 
 echo "sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}"
 
