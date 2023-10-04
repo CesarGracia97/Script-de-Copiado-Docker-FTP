@@ -51,3 +51,6 @@ echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 # 0 */12 * * * /ruta/al/script/copiar_archivos.sh                     (si es 12h)
 # 0 5 * * * TZ='America/Guayaquil' /ruta/al/script.sh
 # 25 16 * * * TZ='America/Guayaquil' /ruta/al/script.sh
+
+
+#15 10 * * * /usr/bin/sudo /usr/bin/docker ps | /usr/bin/grep build && /ruta/completa/DockerContent_Copy.bash || echo "No se encuentra el script DockerContent_Copy.bash"
