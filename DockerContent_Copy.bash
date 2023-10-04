@@ -1,6 +1,14 @@
 #!/bin/bash
 sudo docker ps | grep build
 
+# Ejecutar el comando y capturar la salida
+if sudo docker ps | grep build; then
+    echo "El comando 'sudo docker ps | grep build' se ejecutó con éxito."
+else
+    echo "El comando 'sudo docker ps | grep build' falló en ejecutarse."
+    exit 1
+fi
+
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 
 if [ -z $CONTAINER_NAME_OR_ID ]; then
