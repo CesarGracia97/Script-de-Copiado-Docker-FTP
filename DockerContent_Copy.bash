@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo docker ps | grep build
+
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 
 if [ -z $CONTAINER_NAME_OR_ID ]; then
