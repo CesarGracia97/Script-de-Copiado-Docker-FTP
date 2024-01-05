@@ -1,5 +1,6 @@
 #!/bin/bash
-sudo docker ps | grep build
+sudo -s
+docker ps | grep build
 
 # Ejecutar el comando y capturar la salida
 if sudo docker ps | grep build; then
