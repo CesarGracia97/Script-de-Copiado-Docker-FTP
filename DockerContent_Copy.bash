@@ -19,7 +19,7 @@ fi
 
 
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
-HOST_DIR="/home/root_wso/RespaldoEnviados"
+HOST_DIR="140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
 
 # Verificar si la ruta HOST_DIR existe, si no existe, crearla
 if [ ! -d $HOST_DIR ]; then
