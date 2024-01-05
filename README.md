@@ -9,5 +9,5 @@
 > 5. Ejecutar el comando `./DockerContent_Copy.bash`
 > 6. Verifique que los archivos fueron copiados.
 > 7. Si presiente o ve anomalias con los archivos ingrese al contenedor de Origen.
-> 8. sudo docker ps | grep build         (le permitira obtener el Id del contenedor.)
-> 9. docker exec -it idContenedor_Docker /bin/bash
+> 8. `sudo docker ps | grep build`         (le permitira obtener el Id del contenedor.)
+> 9. `docker exec -it idContenedor_Docker /bin/bash`
