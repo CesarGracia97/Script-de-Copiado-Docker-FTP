@@ -1,29 +1,54 @@
 #!/bin/bash
 
-# Credenciales para el acceso al disco de almacenamiento de red
-USERNAME="140.27.120.102\\Debbancario"
-PASSWORD="Xtr3m#2023"
+# Credenciales FTP
+FTP_USER="140.27.120.102\\Debbancario"
+FTP_PASSWORD="Xtr3m#2023"
+FTP_HOST="140.27.120.102"
 
-# Montar el disco de almacenamiento de red
-echo "Paso 1"
-mount_command="sudo mount -t cifs //140.27.120.102/DebitosBancarios /mnt/remote_disk -o username=$USERNAME,password=$PASSWORD,vers=3.0"
-echo "${mount_command}"
-if $mount_command; then
-    echo "Paso 2"
-    echo "Montaje exitoso en /mnt/remote_disk"
-else
-    error_message=$(eval $mount_command 2>&1)
-    echo "Paso 2"
-    echo "Error durante el montaje del disco de almacenamiento de red: $error_message"
+# Directorios en el contenedor y el host
+CONTAINER_DIR="/usr/src/app/entity/bankdebits"
+HOST_DIR="//DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
+
+# Directorio FTP en el host
+FTP_DIR="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
+
+# Intentar la conexión FTP
+ftp_connect() {
+    ftp -inv $FTP_HOST <<EOF
+    user $FTP_USER $FTP_PASSWORD
+    cd $FTP_DIR
+EOF
+}
+
+# Desconectar FTP
+ftp_disconnect() {
+    ftp -inv $FTP_HOST <<EOF
+    user $FTP_USER $FTP_PASSWORD
+    bye
+EOF
+}
+
+# Intentar conexión FTP
+if ! ftp_connect; then
+    echo "Error al conectar al servidor FTP. Verifica las credenciales y la disponibilidad del servidor."
     exit 1
 fi
 
-HOST_DIR="/mnt/remote_disk/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
-
 # Verificar si la ruta HOST_DIR existe, si no existe, crearla
-if [ ! -d $HOST_DIR ]; then
-    echo "El Script detectó que la ruta de destino no existe, por lo tanto procederá a crearse."
-    mkdir -p $HOST_DIR
+if ! ftp_connect; then
+    echo "Error al acceder al directorio FTP en el servidor. Verifica la existencia del directorio y los permisos."
+    exit 1
+fi
+
+# Cerrar la conexión FTP después de crear la carpeta en el servidor
+ftp_disconnect
+
+# Ejecutar el comando y capturar la salida
+if sudo docker ps | grep build; then
+    echo "El comando 'sudo docker ps | grep build' se ejecutó con éxito."
+else
+    echo "El comando 'sudo docker ps | grep build' falló en ejecutarse."
+    exit 1
 fi
 
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
@@ -33,8 +58,6 @@ if [ -z $CONTAINER_NAME_OR_ID ]; then
     exit 1
 fi
 
-CONTAINER_DIR="/usr/src/app/entity/bankdebits"
-
 # Verificar si la ruta CONTAINER_DIR en el contenedor existe
 if sudo docker exec $CONTAINER_NAME_OR_ID [ ! -d $CONTAINER_DIR ]; then
     echo "La ruta del contenedor no existe. Revisar la Ruta de Origen, finalizando proceso."
@@ -43,17 +66,15 @@ else
     echo "La ruta del contenedor sí existe, procediendo con el copiado."
 fi
 
+# Copiar archivos desde el contenedor al host
 echo "sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}"
-
 sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}
 
+# Cambiar permisos en el host
 sudo chmod -R 777 ${HOST_DIR}
 
+# Mostrar mensaje de éxito
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
-
-# Desmontar el disco de almacenamiento de red al finalizar
-umount /mnt/remote_disk
-echo "Disco de almacenamiento de red desmontado."
 
 
 #1. Abre una terminal en tu servidor Linux.
