@@ -29,12 +29,14 @@ EOF
 }
 
 # Intentar conexión FTP
+echo "PASO 1 ftp_connect (Conexion FTP por medio de Credenciales)"
 if ! ftp_connect; then
     echo "Error al conectar al servidor FTP. Verifica las credenciales y la disponibilidad del servidor."
     exit 1
 fi
 
 # Verificar si la ruta HOST_DIR existe, si no existe, crearla
+echo "PASO 2 ftp_connect (Validacion de Existencia de directorio) "
 if ! ftp_connect; then
     echo "Error al acceder al directorio FTP en el servidor. Verifica la existencia del directorio y los permisos."
     exit 1
@@ -44,6 +46,7 @@ fi
 ftp_disconnect
 
 # Ejecutar el comando y capturar la salida
+echo "Paso 3 Comando Docker de ID de contenedor"
 if sudo docker ps | grep build; then
     echo "El comando 'sudo docker ps | grep build' se ejecutó con éxito."
 else
