@@ -5,11 +5,15 @@ USERNAME="140.27.120.102\\Debbancario"
 PASSWORD="Xtr3m#2023"
 
 # Montar el disco de almacenamiento de red
+echo "Paso 1"
 mount_command="sudo mount -t cifs //140.27.120.102/DebitosBancarios /mnt/remote_disk -o username=$USERNAME,password=$PASSWORD,vers=3.0"
+echo "${mount_command}"
 if $mount_command; then
+    echo "Paso 2"
     echo "Montaje exitoso en /mnt/remote_disk"
 else
     error_message=$(eval $mount_command 2>&1)
+    echo "Paso 2"
     echo "Error durante el montaje del disco de almacenamiento de red: $error_message"
     exit 1
 fi
