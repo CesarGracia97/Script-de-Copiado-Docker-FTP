@@ -1,13 +1,24 @@
 #!/bin/bash
-sudo -s
-docker ps | grep build
 
-# Ejecutar el comando y capturar la salida
-if sudo docker ps | grep build; then
-    echo "El comando 'sudo docker ps | grep build' se ejecutó con éxito."
+# Credenciales para el acceso al disco de almacenamiento de red
+USERNAME="140.27.120.102\\Debbancario"
+PASSWORD="Xtr3m#2023"
+
+# Montar el disco de almacenamiento de red
+mount_command="mount -t cifs //140.27.120.102/DebitosBancarios /mnt/remote_disk -o username=$USERNAME,password=$PASSWORD,vers=3.0"
+if $mount_command; then
+    echo "Montaje exitoso en /mnt/remote_disk"
 else
-    echo "El comando 'sudo docker ps | grep build' falló en ejecutarse."
+    echo "Error durante el montaje del disco de almacenamiento de red."
     exit 1
+fi
+
+HOST_DIR="/mnt/remote_disk/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
+
+# Verificar si la ruta HOST_DIR existe, si no existe, crearla
+if [ ! -d $HOST_DIR ]; then
+    echo "El Script detectó que la ruta de destino no existe, por lo tanto procederá a crearse."
+    mkdir -p $HOST_DIR
 fi
 
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
@@ -17,15 +28,7 @@ if [ -z $CONTAINER_NAME_OR_ID ]; then
     exit 1
 fi
 
-
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
-HOST_DIR="140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
-
-# Verificar si la ruta HOST_DIR existe, si no existe, crearla
-if [ ! -d $HOST_DIR ]; then
-    echo "El Script detectó que la ruta de destino no existe, por lo tanto procederá a crearse."
-    mkdir -p $HOST_DIR
-fi
 
 # Verificar si la ruta CONTAINER_DIR en el contenedor existe
 if sudo docker exec $CONTAINER_NAME_OR_ID [ ! -d $CONTAINER_DIR ]; then
@@ -35,7 +38,6 @@ else
     echo "La ruta del contenedor sí existe, procediendo con el copiado."
 fi
 
-
 echo "sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}"
 
 sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}
@@ -43,6 +45,11 @@ sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}
 sudo chmod -R 777 ${HOST_DIR}
 
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
+
+# Desmontar el disco de almacenamiento de red al finalizar
+umount /mnt/remote_disk
+echo "Disco de almacenamiento de red desmontado."
+
 
 #1. Abre una terminal en tu servidor Linux.
 #2. Ejecuta el siguiente comando para editar el archivo crontab del usuario actual:

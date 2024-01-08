@@ -1,7 +1,7 @@
 # Documentacion DockerContent_Copy.bash.
 ## Versiones.
-> 1. Del Commit 1 al 26 su diferencia con los commits siguientes es la ruta de destino que esta ubicado en la en el mismo servidor.
-> 2. Del Commit 26 en adelante (hasta siguiente versonamiento) su diferencia es el cambio de la ruta de destino de archivos de alojamiento.
+>
+>
 ## Explicacion.
 > Este codigo script de Linux permite copiar archivos de un contenedor y ruta de contenedor especificada, y alojarlo en una ruta especifica. El Script actua de forma minuciosa validando la existencia del contenedor, de la ruta del directorio que alberga los archivos a copiar y de la ruta a alojar los archivos ya copiados; tambien muestra en pantalla los comandos ejecutados y los procesos realizados.
 ## Modo de Uso.
