@@ -9,7 +9,8 @@ mount_command="mount -t cifs //140.27.120.102/DebitosBancarios /mnt/remote_disk 
 if $mount_command; then
     echo "Montaje exitoso en /mnt/remote_disk"
 else
-    echo "Error durante el montaje del disco de almacenamiento de red."
+    error_message=$(eval $mount_command 2>&1)
+    echo "Error durante el montaje del disco de almacenamiento de red: $error_message"
     exit 1
 fi
 
