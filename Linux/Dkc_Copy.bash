@@ -5,7 +5,7 @@ USERNAME="140.27.120.102\\Debbancario"
 PASSWORD="Xtr3m#2023"
 
 # Montar el disco de almacenamiento de red
-mount_command="mount -t cifs //140.27.120.102/DebitosBancarios /mnt/remote_disk -o username=$USERNAME,password=$PASSWORD,vers=3.0"
+mount_command="sudo mount -t cifs //140.27.120.102/DebitosBancarios /mnt/remote_disk -o username=$USERNAME,password=$PASSWORD,vers=3.0"
 if $mount_command; then
     echo "Montaje exitoso en /mnt/remote_disk"
 else
