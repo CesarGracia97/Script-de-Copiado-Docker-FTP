@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Credenciales FTP
-FTP_USER="140.27.120.102\\Debbancario"
+FTP_USER="Debbancario"
 FTP_PASSWORD="Xtr3m#2023"
 FTP_HOST="140.27.120.102"
 
 # Directorios en el contenedor y el host
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
-HOST_DIR="//DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
+HOST_DIR="\\140.27.120.102\DebitosBancarios\PRODUCCION\ARCHIVOS_ENVIADOS_TYTAN"
 
 # Directorio FTP en el host
-FTP_DIR="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
+FTP_DIR="\DebitosBancarios\PRODUCCION\ARCHIVOS_ENVIADOS_TYTAN"
 
 # Intentar la conexión FTP
 ftp_connect() {
