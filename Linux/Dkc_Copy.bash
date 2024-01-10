@@ -54,7 +54,10 @@ quote USER $FTP_USER
 quote PASS $FTP_PASSWORD
 quit
 EOF
-
+echo"------------------------------------"
+echo "Procedimiento FTP"
+echo "Paso 1 (conexion FTP)"
+echo"------------------------------------"
 if [ $? -eq 0 ]; then
     echo "Conexión FTP al HOST ($FTP_HOST) exitosa"
 else
@@ -72,6 +75,11 @@ cd "$HOST_DIR_FTP"
 quit
 EOF
 
+echo"------------------------------------"
+echo "Procedimiento FTP"
+echo "Paso 2 (Existencia de directorio FTP)"
+echo"------------------------------------"
+
 if [ $? -ne 0 ]; then
     # El directorio no existe, crearlo
     ftp -n $FTP_HOST <<EOF
@@ -84,6 +92,11 @@ EOF
 else
     echo "Directorio $HOST_DIR_FTP ya existe en el NAS"
 fi
+
+echo"------------------------------------"
+echo "Procedimiento FTP"
+echo "Paso 3 (Carga de Archivos a FTP)"
+echo"------------------------------------"
 
 # Transferir archivos al NAS
 ftp -n $FTP_HOST <<EOF
@@ -102,6 +115,10 @@ else
     echo "Fallo en la transferencia de archivos al NAS. Verifica la conexión o los permisos."
 fi
 
+echo"------------------------------------"
+echo "Procedimiento FTP"
+echo "Paso 3 (Finalizar conexion FTP)"
+echo"------------------------------------"
 # Cerrar sesión en el FTP
 ftp -n $FTP_HOST <<EOF
 quote USER $FTP_USER
