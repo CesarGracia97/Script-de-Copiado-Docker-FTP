@@ -64,7 +64,7 @@ else
 fi
 
 # Verificar si existe el directorio en el NAS
-HOST_DIR_FTP="\\140.27.120.102\DebitosBancarios\PRODUCCION\ARCHIVOS_ENVIADOS_TYTAN"
+HOST_DIR_FTP="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
 
 ftp -n $FTP_HOST <<EOF
 quote USER $FTP_USER
