@@ -16,7 +16,6 @@ if [ -z $CONTAINER_NAME_OR_ID ]; then
     exit 1
 fi
 
-
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
 HOST_DIR="/home/root_wso/RespaldoEnviados"
 
@@ -33,7 +32,6 @@ if sudo docker exec $CONTAINER_NAME_OR_ID [ ! -d $CONTAINER_DIR ]; then
 else
     echo "La ruta del contenedor sí existe, procediendo con el copiado."
 fi
-
 
 echo "sudo docker cp ${CONTAINER_NAME_OR_ID}:${CONTAINER_DIR} ${HOST_DIR}"
 
@@ -54,7 +52,7 @@ quote USER $FTP_USER
 quote PASS $FTP_PASSWORD
 quit
 EOF
-echo "Procedimiento FTP Paso 1 (conexion FTP)"
+echo "Procedimiento FTP Paso 1 (Conexion FTP)"
 
 if [ $? -eq 0 ]; then
     echo "Conexión FTP al HOST ($FTP_HOST) exitosa"
@@ -90,24 +88,24 @@ fi
 
 echo "Procedimiento FTP Paso 3 (Carga de Archivos a FTP)"
 
-# Transferir archivos al NAS
-ftp -n $FTP_HOST <<EOF
+# Transferir archivos al NAS (solo archivos regulares)
+find "$HOST_DIR" -type f -exec ftp -n $FTP_HOST <<EOF
 quote USER $FTP_USER
 quote PASS $FTP_PASSWORD
 cd "$HOST_DIR_FTP"
 lcd "$HOST_DIR"
 prompt
-mput *
+mput {}
 quit
 EOF
 
 if [ $? -eq 0 ]; then
     echo "Transferencia de archivos al NAS exitosa"
 else
-    echo "Fallo en la transferencia de archivos al NAS. Verifica la conexión o los permisos."
+    echo "Error: Fallo en la transferencia de archivos al NAS. Verifica la conexión o los permisos."
 fi
 
-echo "Procedimiento FTP Paso 4 (Finalizar conexion FTP)"
+echo "Procedimiento FTP Paso 4 (Finalizar conexión FTP)"
 
 # Cerrar sesión en el FTP
 ftp -n $FTP_HOST <<EOF
@@ -115,3 +113,4 @@ quote USER $FTP_USER
 quote PASS $FTP_PASSWORD
 quit
 EOF
+
