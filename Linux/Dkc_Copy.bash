@@ -41,7 +41,6 @@ sudo chmod -R 777 ${HOST_DIR}
 
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 
-# Conectar al NAS a través de FTP
 FTP_USER="Debbancario"
 FTP_PASSWORD="Xtr3m#2023"
 FTP_HOST="140.27.120.102"
@@ -88,21 +87,21 @@ fi
 
 echo "Procedimiento FTP Paso 3 (Carga de Archivos a FTP)"
 
-# Transferir archivos al NAS (solo archivos regulares)
-find "$HOST_DIR" -type f -exec ftp -n $FTP_HOST <<EOF
+# Transferir la carpeta bankdebits al NAS
+ftp -n $FTP_HOST <<EOF
 quote USER $FTP_USER
 quote PASS $FTP_PASSWORD
 cd "$HOST_DIR_FTP"
 lcd "$HOST_DIR"
 prompt
-mput {}
+mput bankdebits/*
 quit
 EOF
 
 if [ $? -eq 0 ]; then
-    echo "Transferencia de archivos al NAS exitosa"
+    echo "Transferencia de la carpeta bankdebits al NAS exitosa"
 else
-    echo "Error: Fallo en la transferencia de archivos al NAS. Verifica la conexión o los permisos."
+    echo "Error: Fallo en la transferencia de la carpeta bankdebits al NAS. Verifica la conexión o los permisos."
 fi
 
 echo "Procedimiento FTP Paso 4 (Finalizar conexión FTP)"
@@ -113,4 +112,3 @@ quote USER $FTP_USER
 quote PASS $FTP_PASSWORD
 quit
 EOF
-
