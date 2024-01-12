@@ -4,12 +4,14 @@
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
 HOST_DIR="/home/root_wso/RespaldoEnviados"
+
 #Definir Variables de Servidor->FTP
 FTP_USER="Debbancario"
 FTP_PASSWORD="Xtr3m#2023"
 FTP_HOST="140.27.120.102"
 HOST_DIR_FTP="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
 CHRFTP_FILE_DIR="/RespaldoEnviados/bankdebits"
+ 
 #Definir Función para manejar errores
 handle_error() {
     local exit_code=$?
