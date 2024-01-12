@@ -1,4 +1,24 @@
 #!/bin/bash
+
+#Definir Variables de Contenedor->Servidor
+CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
+CONTAINER_DIR="/usr/src/app/entity/bankdebits"
+HOST_DIR="/home/root_wso/RespaldoEnviados"
+#Definir Variables de Servidor->FTP
+FTP_USER="Debbancario"
+FTP_PASSWORD="Xtr3m#2023"
+FTP_HOST="140.27.120.102"
+HOST_DIR_FTP="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
+CHRFTP_FILE_DIR="/RespaldoEnviados/bankdebits"
+#Definir Función para manejar errores
+handle_error() {
+    local exit_code=$?
+    if [ $exit_code -ne 0 ]; then
+        echo "Error: $1"
+        exit $exit_code
+    fi
+}
+
 sudo docker ps | grep build
 
 # Ejecutar el comando y capturar la salida
@@ -9,15 +29,11 @@ else
     exit 1
 fi
 
-CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 
 if [ -z $CONTAINER_NAME_OR_ID ]; then
     echo "No se encontró ningún contenedor con 'build' en su nombre o ID."
     exit 1
 fi
-
-CONTAINER_DIR="/usr/src/app/entity/bankdebits"
-HOST_DIR="/home/root_wso/RespaldoEnviados"
 
 # Verificar si la ruta HOST_DIR existe, si no existe, crearla
 if [ ! -d $HOST_DIR ]; then
@@ -41,74 +57,19 @@ sudo chmod -R 777 ${HOST_DIR}
 
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 
-FTP_USER="Debbancario"
-FTP_PASSWORD="Xtr3m#2023"
-FTP_HOST="140.27.120.102"
+#ParteFTP
 
-# Iniciar sesión en el FTP y verificar la conexión
-ftp -n $FTP_HOST <<EOF
-quote USER $FTP_USER
-quote PASS $FTP_PASSWORD
-quit
-EOF
-echo "Procedimiento FTP Paso 1 (Conexion FTP)"
-
-if [ $? -eq 0 ]; then
-    echo "Conexión FTP al HOST ($FTP_HOST) exitosa"
-else
-    echo "Conexión FTP fallida. Verifica las credenciales o la configuración del servidor."
-    exit 1
-fi
-
-# Verificar si existe el directorio en el NAS
-HOST_DIR_FTP="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
-
-ftp -n $FTP_HOST <<EOF
-quote USER $FTP_USER
-quote PASS $FTP_PASSWORD
-cd "$HOST_DIR_FTP"
-quit
+echo "Iniciando carga de archivos a la NAS a través de FTP..."
+ftp -inv $HOST_FTP <<EOF
+    user $FTP_USER $FTP_PASSWORD
+    binary
+    cd $HOST_DIR_FTP
+    mput -r $HOST_DIR/*
+    bye
 EOF
 
-echo "Procedimiento FTP Paso 2 (Existencia de directorio FTP)"
+# Manejar errores durante la carga de archivos a la NAS
+handle_error "Error al cargar archivos a la NAS a través de FTP"
 
-if [ $? -ne 0 ]; then
-    # El directorio no existe, crearlo
-    ftp -n $FTP_HOST <<EOF
-    quote USER $FTP_USER
-    quote PASS $FTP_PASSWORD
-    mkdir "$HOST_DIR_FTP"
-    quit
-EOF
-    echo "Directorio $HOST_DIR_FTP creado en el NAS"
-else
-    echo "Directorio $HOST_DIR_FTP ya existe en el NAS"
-fi
-
-echo "Procedimiento FTP Paso 3 (Carga de Archivos a FTP)"
-
-# Transferir la carpeta bankdebits al NAS
-ftp -n $FTP_HOST <<EOF
-quote USER $FTP_USER
-quote PASS $FTP_PASSWORD
-cd "$HOST_DIR_FTP"
-lcd "$HOST_DIR"
-prompt
-mput bankdebits/*
-quit
-EOF
-
-if [ $? -eq 0 ]; then
-    echo "Transferencia de la carpeta bankdebits al NAS exitosa"
-else
-    echo "Error: Fallo en la transferencia de la carpeta bankdebits al NAS. Verifica la conexión o los permisos."
-fi
-
-echo "Procedimiento FTP Paso 4 (Finalizar conexión FTP)"
-
-# Cerrar sesión en el FTP
-ftp -n $FTP_HOST <<EOF
-quote USER $FTP_USER
-quote PASS $FTP_PASSWORD
-quit
-EOF
+# Mensaje de éxito
+echo "Archivos cargados en la NAS con éxito."
