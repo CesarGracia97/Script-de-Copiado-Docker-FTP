@@ -63,8 +63,8 @@ echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 
 echo "Iniciando carga de archivos a la NAS a través de FTP..."
 ftp -inv $HOST_FTP <<EOF
-    user $FTP_USER $FTP_PASSWORD
-    binary
+    quote USER $FTP_USER
+    quote PASS $FTP_PASSWORD
     cd $HOST_DIR_FTP
     mput -r $HOST_DIR/*
     bye
