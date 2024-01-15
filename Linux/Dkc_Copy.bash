@@ -121,3 +121,20 @@ else
   echo "Fallo la transferencia de archivos."
   exit 1
 fi
+
+# Preguntar al usuario si desea eliminar archivos locales
+read -p "¿Deseas eliminar los archivos locales de las carpetas de bankdebits? (Y/N): " opcion
+
+# Eliminar archivos locales si la respuesta es 'Y'
+if [ "$opcion" == "Y" ] || [ "$opcion" == "y" ]; then
+  rm -f $DIR_ORIGEN1/*
+  rm -f $DIR_ORIGEN2/*
+  rm -f $DIR_ORIGEN3/*
+  rm -f $DIR_ORIGEN4/*
+  rm -f $DIR_ORIGEN5/*
+  rm -f $DIR_ORIGEN6/*
+  rm -f $DIR_ORIGEN7/*
+  echo "Archivos locales eliminados."
+else
+  echo "No se han eliminado archivos locales."
+fi
