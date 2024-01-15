@@ -20,13 +20,13 @@ DIR_ORIGEN6="/home/root_wso/RespaldoEnviados/bankdebits/bancopichincha"
 DIR_ORIGEN7="/home/root_wso/RespaldoEnviados/bankdebits/bancointernacional"
 
 # Directorios remotos de destino
-DIR_HOST_R1="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bankdebits/sci"
-DIR_HOST_R2="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancobolivariano"
-DIR_HOST_R3="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancopacifico"
-DIR_HOST_R4="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancoguayaquil"
-DIR_HOST_R5="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancoprodubanco"
-DIR_HOST_R6="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancopichincha"
-DIR_HOST_R7="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancointernacional"
+DIR_HOST_R1="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bankdebits/sci"
+DIR_HOST_R2="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancobolivariano"
+DIR_HOST_R3="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancopacifico"
+DIR_HOST_R4="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancoguayaquil"
+DIR_HOST_R5="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancoprodubanco"
+DIR_HOST_R6="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancopichincha"
+DIR_HOST_R7="/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancointernacional"
 
 # Parte Docker_Copy
 sudo docker ps | grep build
