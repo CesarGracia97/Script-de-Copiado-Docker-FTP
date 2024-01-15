@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#Definir Variables de Contenedor->Servidor
+# Definir Variables de Contenedor->Servidor
 CONTAINER_NAME_OR_ID=$(sudo docker ps | grep build | awk '{print $1}')
 CONTAINER_DIR="/usr/src/app/entity/bankdebits"
 HOST_DIR="/home/root_wso/RespaldoEnviados"
 
-#Definir Variables de Servidor->FTP
+# Definir Variables de Servidor->FTP
 FTP_USER="Debbancario"
 FTP_PASSWORD="Xtr3m#2023"
 FTP_HOST="140.27.120.102"
