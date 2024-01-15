@@ -9,18 +9,26 @@ HOST_DIR="/home/root_wso/RespaldoEnviados"
 FTP_USER="Debbancario"
 FTP_PASSWORD="Xtr3m#2023"
 FTP_HOST="140.27.120.102"
-HOST_DIR_FTP="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN"
-CHRFTP_FILE_DIR="/RespaldoEnviados/bankdebits"
- 
-#Definir Función para manejar errores
-handle_error() {
-    local exit_code=$?
-    if [ $exit_code -ne 0 ]; then
-        echo "Error: $1"
-        exit $exit_code
-    fi
-}
 
+# Directorios locales de origen
+DIR_ORIGEN1="/home/root_wso/RespaldoEnviados/bankdebits/sci"
+DIR_ORIGEN2="/home/root_wso/RespaldoEnviados/bankdebits/bancobolivariano"
+DIR_ORIGEN3="/home/root_wso/RespaldoEnviados/bankdebits/bancopacifico"
+DIR_ORIGEN4="/home/root_wso/RespaldoEnviados/bankdebits/bancoguayaquil"
+DIR_ORIGEN5="/home/root_wso/RespaldoEnviados/bankdebits/bancoprodubanco"
+DIR_ORIGEN6="/home/root_wso/RespaldoEnviados/bankdebits/bancopichincha"
+DIR_ORIGEN7="/home/root_wso/RespaldoEnviados/bankdebits/bancointernacional"
+
+# Directorios remotos de destino
+DIR_HOST_R1="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bankdebits/sci"
+DIR_HOST_R2="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancobolivariano"
+DIR_HOST_R3="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancopacifico"
+DIR_HOST_R4="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancoguayaquil"
+DIR_HOST_R5="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancoprodubanco"
+DIR_HOST_R6="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancopichincha"
+DIR_HOST_R7="//140.27.120.102/DebitosBancarios/PRODUCCION/ARCHIVOS_ENVIADOS_TYTAN/bancointernacional"
+
+# Parte Docker_Copy
 sudo docker ps | grep build
 
 # Ejecutar el comando y capturar la salida
@@ -59,19 +67,57 @@ sudo chmod -R 777 ${HOST_DIR}
 
 echo "Archivos copiados desde el contenedor a ${HOST_DIR}"
 
-#ParteFTP
+# ParteFTP
+# Iniciar sesión FTP y verificar la conexión
+ftp -n $FTP_HOST <<END_SCRIPT
+quote USER $FTP_USER
+quote PASS $FTP_PASSWORD
+prompt
+ls
+bye
+END_SCRIPT
 
-echo "Iniciando carga de archivos a la NAS a través de FTP..."
-ftp -inv $HOST_FTP <<EOF
-    quote USER $FTP_USER
-    quote PASS $FTP_PASSWORD
-    cd $HOST_DIR_FTP
-    mput -r $HOST_DIR/*
-    bye
-EOF
+# Verificar el estado de la conexión
+if [ $? -eq 0 ]; then
+  echo "Conexión exitosa a NAS."
+else
+  echo "Fallo la conexión a NAS."
+  exit 1
+fi
 
-# Manejar errores durante la carga de archivos a la NAS
-handle_error "Error al cargar archivos a la NAS a través de FTP"
+# Realizar transferencia de archivos usando mput
+ftp -n $FTP_HOST <<END_SCRIPT
+quote USER $FTP_USER
+quote PASS $FTP_PASSWORD
+prompt
+cd $DIR_HOST_R1
+lcd $DIR_ORIGEN1
+mput *
+cd $DIR_HOST_R2
+lcd $DIR_ORIGEN2
+mput *
+cd $DIR_HOST_R3
+lcd $DIR_ORIGEN3
+mput *
+cd $DIR_HOST_R4
+lcd $DIR_ORIGEN4
+mput *
+cd $DIR_HOST_R5
+lcd $DIR_ORIGEN5
+mput *
+cd $DIR_HOST_R6
+lcd $DIR_ORIGEN6
+mput *
+cd $DIR_HOST_R7
+lcd $DIR_ORIGEN7
+mput *
+bye
+END_SCRIPT
 
-# Mensaje de éxito
-echo "Archivos cargados en la NAS con éxito."
+# Verificar el estado de la transferencia
+if [ $? -eq 0 ]; then
+  echo "Transferencia de archivos exitosa."
+else
+  echo "Fallo la transferencia de archivos."
+  exit 1
+fi
