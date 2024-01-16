@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Linux"
+    "\\Linux",
+    "\\Linux\\192.168.21.147"
   ],
-  "SelectedNode": "\\Linux\\Command_Update.bash",
+  "SelectedNode": "\\Linux\\192.168.21.147\\Dkc_Copy.bash",
   "PreviewInSolutionExplorer": false
 }
