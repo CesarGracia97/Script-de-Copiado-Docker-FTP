@@ -63,7 +63,7 @@ EOF
 
         # Eliminar archivos locales si la respuesta es 'Y'
         if [ "$opcion" == "Y" ] || [ "$opcion" == "y" ]; then
-          rm -f $DIR_ORIGEN1/*
+          #rm -f $DIR_ORIGEN1/*
           rm -f $DIR_ORIGEN2/*
           rm -f $DIR_ORIGEN3/*
           rm -f $DIR_ORIGEN4/*

@@ -1,8 +1,9 @@
 # Documentacion Dkc_Copy.bash 192.168.21.147
 ## Procedimiento
-> Los archivos son copiados desde el servidor saltandose el proceso Docker.
-> Los archivos son enviados directamente al FTP
-
+> El funcionamiento de Dkc_Copy (21.147) es similar a su version original (59.184), el mayor cambio es el paso de  FTP a SFTP por razones basadas en el servidor donde se aloja este script.
+> Dkc_Copy (21.147) se saltea el procedimiento Docker ya que los archivos son alojados desde un servidor local evitando todo el procedimiento de ID y copiado.
+> Dkc_Copy (21.147) cambia la estructura de inicio de sesion por razones de sintaxis (FTP - SFTP).
+> Dkc_Copy (21.147) mantiene la pregunta de eliminacion de archivos para evitar la latencia al enviar datos por medio del script.
 `1. Abre una terminal en tu servidor Linux.`
 `2. Ejecuta el siguiente comando para editar el archivo crontab del usuario actual:`
 `crontab -e`
