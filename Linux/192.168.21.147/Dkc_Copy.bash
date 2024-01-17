@@ -63,17 +63,18 @@ EOF
 
         # Eliminar archivos locales si la respuesta es 'Y'
         if [ "$opcion" == "Y" ] || [ "$opcion" == "y" ]; then
-          #rm -f $DIR_ORIGEN1/*
-          rm -f $DIR_ORIGEN2/*
-          rm -f $DIR_ORIGEN3/*
-          rm -f $DIR_ORIGEN4/*
-          rm -f $DIR_ORIGEN5/*
-          rm -f $DIR_ORIGEN6/*
-          rm -f $DIR_ORIGEN7/*
-          rm -f $DIR_ORIGEN8/*
-          echo "Archivos locales eliminados."
+            find $DIR_ORIGEN1 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN2 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN3 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN4 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN5 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN6 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN7 -type f -name "*.txt" -exec rm -f {} +
+            find $DIR_ORIGEN8 -type f -name "*.txt" -exec rm -f {} +
+
+            echo "Archivos locales .txt eliminados."
         else
-          echo "No se han eliminado archivos locales."
+            echo "No se han eliminado archivos locales."
         fi
     else
         echo "Fallo en la transferencia de archivos."
